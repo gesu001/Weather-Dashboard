@@ -3,74 +3,81 @@ var btn = document.getElementById("submit");
 var APIKey = "74c48057670478a17f27408eb3690c3b"
 var cityListEl = document.getElementById("cityList")
 var cityNames = [];
-
-var testEl = document.getElementById('test')
-
-
-//console.log(dayjs('2023-04-27').unix())
+var displayAreaEl = document.getElementById("displayArea")
+//var today = dayjs().format('YYYY-MM-DD');
+//var nextday = dayjs().add(1, "day").format('YYYY-MM-DD');
+//console.log(today)
+//console.log(nextday)
+//console.log(nextday + " 00:00:00")
 
 function getApi() {
   var cityName = inputEl.value;
-  var requestUrl = 'https://api.openweathermap.org/data/2.5/weather?q='+ cityName + '&appid=74c48057670478a17f27408eb3690c3b'
+  var requestUrl = 'https://api.openweathermap.org/data/2.5/weather?q='+ cityName + '&appid=' + APIKey
   fetch(requestUrl)
     .then(function (response) {
       return response.json();
     })
     .then(function (data) {
+        console.log(data)
       var iconCode = data.weather[0].icon
       //console.log(iconUrl= 'http://openweathermap.org/img/w/'+ iconCode +'.png');
 
       var city = document.getElementById('cityname')
       var currentWeather = document.getElementById('currentWeather')
-      city.textContent = data.name;
+      var date = dayjs.unix(data.dt).format('YYYY-MM-DD');
+      city.textContent = data.name + " (" + date + ") " + iconCode;
       currentWeather.innerText = 'Temp: '+ data.main.temp + '\xB0F'+ '\n' + 'Wind: '+ data.wind.speed + ' MPH' + '\n' + 'Humidity: '+ data.main.humidity + '%'
     });
   }
 
   function getDailyApi () {
     var cityName = inputEl.value;
-    var Url = 'https://api.openweathermap.org/data/2.5/forecast?q=' + cityName + '&cnt=5&appid=74c48057670478a17f27408eb3690c3b'
+    var Url = 'https://api.openweathermap.org/data/2.5/forecast?q=' + cityName + '&appid=' + APIKey
     fetch(Url)
     .then(function (response) {
       return response.json();
     })
     .then(function (data) {
-      console.log(data)
       var lists = data.list
 
       var headerEl = document.createElement("h2")
+      displayAreaEl.appendChild(headerEl)
+      headerEl.textContent = "5-Day Forcast:"
 
-      testEl.appendChild(headerEl)
+      console.log(lists)
 
-      headerEl.textContent = "5-Day Forcast"
-      for (var i = 0; i < lists.length; i++) {
-        
-        var dailyList = lists[i];
-        console.log(dailyList)
+      var fiveDayLists = lists.filter(function(list){
+        return list.dt_txt.match("00:00:00")
 
+      })
+     console.log(fiveDayLists)
+     displayAreaEl.innerHTML = "";
+
+      for (var i = 0; i < fiveDayLists.length; i++) { 
+        var dailyList = fiveDayLists[i];
         var dailyTemp = dailyList.main.temp;
-        console.log(dailyTemp)
+        var dailyDate = dailyList.dt_txt.split(" ")[0]
+        console.log(dailyDate)
         var dailyHumidity = dailyList.main.humidity;
         var dailyWind = dailyList.wind.speed
         var dailyIcon = dailyList.weather[0].icon
 
+
         var divEl = document.createElement('div')
         var ulEl = document.createElement('ul')
         var dateEl = document.createElement('li')
+        var iconEl = document.createElement('li')
         var tempEl = document.createElement('li')
         var humidityEl = document.createElement('li')
-        var windEl = document.createElement('li')
-        var iconEl = document.createElement('li')
+        var windEl = document.createElement('li')        
 
         ulEl.setAttribute("data-index", "i");
         divEl.setAttribute("class", "col-12 col-sm-6 col-lg-2 mb-3");
 
         ulEl.setAttribute("class","card card-1 bg-dark text-light");
 
-        testEl.appendChild(divEl)
-        
+        displayAreaEl.appendChild(divEl)
         divEl.appendChild(ulEl)
-
         ulEl.appendChild(dateEl);
         ulEl.appendChild(iconEl);
         ulEl.appendChild(tempEl);
@@ -78,10 +85,11 @@ function getApi() {
         ulEl.appendChild(windEl);
         
 
-        tempEl.textContent = dailyTemp;
-        humidityEl.textContent = dailyHumidity;
-        windEl.textContent = dailyWind;
+        dateEl.textContent = dailyDate;
         iconEl.textContent = dailyIcon;
+        tempEl.textContent = "Temp: " + dailyTemp;
+        humidityEl.textContent = "Humidity: " + dailyHumidity;
+        windEl.textContent = "Wind: " + dailyWind;
         //console.log(iconUrl= 'http://openweathermap.org/img/w/'+ iconCode +'.png');   
       }
     
