@@ -1,14 +1,18 @@
+header {
+  background: linear-gradient(to right, #0382f0, #33029e);
+}
+
 ul {
     list-style-type: none;
     margin: 0px;
     padding: 0;
 }
 
-.custom-class {
-    display: block;
-  }
-  @include media-breakpoint-up(sm) {
-    .custom-class {
-      display: none;
-    }
-  }
+li {
+  padding: 5px;
+}
+
+.card {
+  background-color: #022d52;
+}
+
