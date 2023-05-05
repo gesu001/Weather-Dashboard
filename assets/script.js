@@ -24,7 +24,6 @@ function getApi() {
       };
 
       currentWeatherEl.innerHTML = "";
-
       var currentDate = dayjs.unix(data.dt).format('D/M/YYYY');
       var iconCode = data.weather[0].icon
       // get weather icon URL from OpenWeather
