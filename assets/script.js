@@ -95,8 +95,8 @@ function getDailyApi () {
       var dateEl = document.createElement('li')
       var iconEl = document.createElement('li')
       var tempEl = document.createElement('li')
-      var humidityEl = document.createElement('li')
       var windEl = document.createElement('li')
+      var humidityEl = document.createElement('li')
       var iconImgEl = document.createElement('img')       
 
       ulEl.setAttribute("data-index", i);
@@ -110,8 +110,8 @@ function getDailyApi () {
       ulEl.appendChild(dateEl);
       ulEl.appendChild(iconEl);
       ulEl.appendChild(tempEl);
-      ulEl.appendChild(humidityEl);
       ulEl.appendChild(windEl);
+      ulEl.appendChild(humidityEl);
       iconEl.appendChild(iconImgEl);
 
       dateEl.textContent = date;
